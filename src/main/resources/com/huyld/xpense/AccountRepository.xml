@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.huyld.xpense.repository.AccountRepository">
+	<resultMap type="com.huyld.xpense.model.Account" id="Account">
+		<result column="account_id" property="accountId" />
+		<result column="account_name" property="accountName" />
+	</resultMap>
+	
+	<select id="findAccountById" parameterType="Integer" resultMap="Account">
+		SELECT 
+			account_id, 
+			account_name
+		FROM
+			account
+		WHERE
+			account_id = #{accountId}
+			AND del_flg = false;
+		
+	</select>
+</mapper>
