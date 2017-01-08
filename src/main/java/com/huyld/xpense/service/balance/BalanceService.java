@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.huyld.xpense.service;
+package com.huyld.xpense.service.balance;
 
 import com.huyld.xpense.model.Balance;
 

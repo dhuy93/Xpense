@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.huyld.xpense.service;
+package com.huyld.xpense.service.balance;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
