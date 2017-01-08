@@ -3,6 +3,8 @@
  */
 package com.huyld.xpense.repository;
 
+import java.util.Collection;
+
 import org.springframework.stereotype.Component;
 
 import com.huyld.xpense.model.Account;
@@ -16,4 +18,11 @@ import com.huyld.xpense.model.Account;
 public interface AccountRepository {
 
 	public Account findAccountById(int accountId);
+	
+	/**
+	 * Find all accounts belong to a specific user
+	 * @param userId
+	 * @return
+	 */
+	public Collection<Account> findAllAccountByUserId(int userId);
 }

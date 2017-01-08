@@ -3,6 +3,8 @@
  */
 package com.huyld.xpense.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,11 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account findAccountById(int accountId) {
 		return accountRepository.findAccountById(accountId);
+	}
+
+	@Override
+	public Collection<Account> findAllAccountByUserId(int userId) {
+		return accountRepository.findAllAccountByUserId(userId);
 	}
 
 }

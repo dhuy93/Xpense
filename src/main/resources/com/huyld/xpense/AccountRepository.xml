@@ -18,4 +18,13 @@
 			AND del_flg = false;
 		
 	</select>
+	
+	<select id="findAllAccountByUserId" parameterMap="Integer" resultMap="Account">
+		SELECT *
+		FROM
+			account
+		WHERE
+			del_flg = 0
+			AND user_id = #{userId}
+	</select>
 </mapper>
