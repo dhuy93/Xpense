@@ -19,12 +19,12 @@
 		
 	</select>
 	
-	<select id="findAllAccountByUserId" parameterMap="Integer" resultMap="Account">
+	<select id="findAllAccountByUserId" parameterType="Integer" resultMap="Account">
 		SELECT *
 		FROM
 			account
 		WHERE
-			del_flg = 0
+			del_flg = false
 			AND user_id = #{userId}
 	</select>
 </mapper>

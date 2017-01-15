@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huyld.xpense.repository.UserRepository">
+	<resultMap type="com.huyld.xpense.model.User" id="User">
+		<result column="user_id" property="userId" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="created_date" property="createdDate" />
+		<result column="del_flg" property="delFlg" />
+		<result column="salt" property="salt" />
+		<result column="role_id" property="roleId" />
+		<result column="role_name" property="roleName" />
+	</resultMap>
+	
+	<select id="findOne" parameterType="String" resultMap="User">
+		SELECT 
+			u.user_id,
+			u.username,
+			u.password,
+			u.created_date,
+			u.del_flg,
+			u.salt,
+			u.role_id,
+			ur.role_name
+		FROM
+			"user" u JOIN user_role ur ON u.role_id = ur.user_role_id
+		WHERE
+			u.username = #{username}
+			AND u.del_flg = false;
+	</select>
+</mapper>
