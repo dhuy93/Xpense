@@ -21,4 +21,11 @@ public interface AccountService {
 	 * @return
 	 */
 	public Collection<Account> findAllAccountByUserId(int userId);
+	
+	/**
+	 * Find all accounts belong to a specific user
+	 * @param username
+	 * @return
+	 */
+	public Collection<Account> findAllAccountByUserName(String username);
 }

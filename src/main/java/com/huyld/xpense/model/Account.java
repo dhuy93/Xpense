@@ -4,7 +4,7 @@
 package com.huyld.xpense.model;
 
 /**
- * @author ldhuy
+ * @author ldhuy 
  * Created on 15/10/2016
  *
  */
@@ -13,6 +13,9 @@ public class Account {
 	private int accountId;
 	private String accountName;
 	private boolean delFlg;
+	private User user;
+	private Balance balance;
+	private Currency currency;
 
 	/**
 	 * @return the accountId
@@ -57,6 +60,49 @@ public class Account {
 	 */
 	public void setDelFlg(boolean delFlg) {
 		this.delFlg = delFlg;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user
+	 *            the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the balance
+	 */
+	public Balance getBalance() {
+		return balance;
+	}
+
+	/**
+	 * @param balance the balance to set
+	 */
+	public void setBalance(Balance balance) {
+		this.balance = balance;
+	}
+
+	/**
+	 * @return the currency
+	 */
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	/**
+	 * @param currency the currency to set
+	 */
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 }

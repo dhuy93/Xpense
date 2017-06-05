@@ -2,29 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.huyld.xpense.repository.AccountRepository">
+	<resultMap type="com.huyld.xpense.model.User" id="User">
+		<result column="user_id" property="userId" />
+		<result column="username" property="username" />
+		<result column="password" property="password"/>
+		<result column="created_date" property="createdDate" />
+		<result column="del_flg" property="delFlg" />
+		<result column="salt" property="salt" />
+		<result column="role_id" property="roleId" />
+		<result column="role_name" property="roleName" />
+	</resultMap>
+	<resultMap type="com.huyld.xpense.model.Currency" id="Currency">
+		<result column="currency_id" property="currencyId" />
+		<result column="name" property="name" />
+		<result column="del_flg" property="delFlg" />
+	</resultMap>
+	<resultMap type="com.huyld.xpense.model.Balance" id="Balance">
+		<result column="account_id" property="accountId" />
+		<result column="currency_id" property="currencyId" />
+		<result column="amount" property="amount" />
+		<result column="del_flg" property="delFlg" />
+	</resultMap>
 	<resultMap type="com.huyld.xpense.model.Account" id="Account">
 		<result column="account_id" property="accountId" />
 		<result column="account_name" property="accountName" />
+		<result column="del_flg" property="delFlg" />
+		<association property="user" resultMap="User" />
+		<association property="balance" resultMap="Balance" />
+		<association property="currency" resultMap="Currency" />
 	</resultMap>
 	
 	<select id="findAccountById" parameterType="Integer" resultMap="Account">
 		SELECT 
-			account_id, 
-			account_name
+			a.account_id, 
+			a.account_name,
+			u.user_id,
+			u.username,
+			u.password,
+			u.created_date,
+			u.del_flg,
+			u.salt,
+			u.role_id
 		FROM
-			account
+			account a JOIN "user" u ON a.user_id = u.user_id
 		WHERE
-			account_id = #{accountId}
-			AND del_flg = false;
+			a.account_id = #{accountId}
+			AND a.del_flg = false
+			AND u.del_flg = false
 		
 	</select>
 	
 	<select id="findAllAccountByUserId" parameterType="Integer" resultMap="Account">
-		SELECT *
+		SELECT
+			a.account_id, 
+			a.account_name,
+			u.user_id,
+			u.username,
+			u.password,
+			u.created_date,
+			u.del_flg,
+			u.salt,
+			u.role_id
 		FROM
-			account
+			account a JOIN "user" u ON a.user_id = u.user_id
 		WHERE
-			del_flg = false
+			u.del_flg = false
+			AND a.del_flg = false
 			AND user_id = #{userId}
+	</select>
+	
+	<select id="findAllAccountByUserName" parameterType="String" resultMap="Account">
+		SELECT
+			a.account_id, 
+			a.account_name,
+			u.user_id,
+			u.username,
+			u.password,
+			u.created_date,
+			u.del_flg,
+			u.salt,
+			u.role_id,
+			b.account_id,
+			b.currency_id,
+			b.del_flg,
+			b.amount,
+			c.currency_id,
+			c.name,
+			c.del_flg
+		FROM
+			account a JOIN "user" u ON a.user_id = u.user_id
+			JOIN balance b ON b.account_id = a.account_id
+			JOIN currency c ON b.currency_id = c.currency_id
+		WHERE
+			u.del_flg = false
+			AND a.del_flg = false
+			AND username = #{username}
+		ORDER BY a.account_name, c.name;
 	</select>
 </mapper>

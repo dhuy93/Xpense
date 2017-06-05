@@ -29,7 +29,7 @@ public class LoginController {
 			model.addAttribute("msg", "You've been logged out successfully.");
 		}
 
-		return "login";
+		return "/login";
 
 	}
 }

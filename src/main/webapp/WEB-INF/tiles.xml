@@ -4,23 +4,21 @@
 		"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
 <tiles-definitions>  
 	<definition name="base.definition"  
-		template="/WEB-INF/common/base-layout.jsp">  
-		<put-attribute name="taglibs" value="/WEB-INF/common/taglibs.jsp"></put-attribute>
+		template="/WEB-INF/views/templates/base-layout.jsp">
 		<put-attribute name="title" value="" />  
-		<put-attribute name="header" value="/WEB-INF/common/header.jsp" />  
-		<put-attribute name="menu" value="/WEB-INF/common/menu.jsp" />  
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />  
+		<put-attribute name="menu" value="/WEB-INF/views/common/menu.jsp" />  
 		<put-attribute name="body" value="" />  
-		<put-attribute name="footer" value="/WEB-INF/common/footer.jsp" />  
+		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />  
 	</definition>  
 
-	<definition name="contact" extends="base.definition">  
-		<put-attribute name="title" value="Contact Manager" />  
-		<put-attribute name="body" value="/WEB-INF/common/contact.jsp" />  
-	</definition>  
+	  
 
-	<definition name="hello" extends="base.definition">  
-		<put-attribute name="title" value="Hello Spring MVC" />  
-		<put-attribute name="body" value="/WEB-INF/common/hello.jsp" />  
-	</definition>  
+	<definition name="dashboard/*/*" extends="base.definition">
+		<put-attribute name="body" value="/WEB-INF/views/dashboard/{1}/{2}.jsp" type="template" />
+	</definition>
+	<definition name="/*" template="/WEB-INF/views/templates/simple-layout.jsp">
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" type="template" />
+	</definition>
 
 </tiles-definitions>  

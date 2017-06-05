@@ -22,8 +22,8 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="url" value="jdbc:postgresql://localhost:5432/Xpense" />
-        <property name="username" value="#####" />
-        <property name="password" value="#####" />
+        <property name="username" value="huyld" />
+        <property name="password" value="iBWvZWCUgiJJAzQgoyM2" />
 
         <property name="connectionProperties">
             <props>
