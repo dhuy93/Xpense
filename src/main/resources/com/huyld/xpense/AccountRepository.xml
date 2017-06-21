@@ -27,9 +27,24 @@
 		<result column="account_id" property="accountId" />
 		<result column="account_name" property="accountName" />
 		<result column="del_flg" property="delFlg" />
-		<association property="user" resultMap="User" />
-		<association property="balance" resultMap="Balance" />
-		<association property="currency" resultMap="Currency" />
+<!-- 		<association property="user" column="user_id" resultMap="User" /> -->
+		<result column="user.user_id" property="userId" />
+		<result column="user.username" property="username" />
+		<result column="user.password" property="password"/>
+		<result column="user.created_date" property="createdDate" />
+		<result column="user.del_flg" property="delFlg" />
+		<result column="user.salt" property="salt" />
+		<result column="user.role_id" property="roleId" />
+		<result column="user.role_name" property="roleName" />
+<!-- 		<association property="balance" resultMap="Balance" /> -->
+		<result column="balance.account_id" property="accountId" />
+		<result column="balance.currency_id" property="currencyId" />
+		<result column="balance.amount" property="amount" />
+		<result column="balance.del_flg" property="delFlg" />
+<!-- 		<association property="currency" column="currency_id" resultMap="Currency" /> -->
+		<result column="currency.currency_id" property="currencyId" />
+		<result column="currency.name" property="name" />
+		<result column="currency.del_flg" property="delFlg" />
 	</resultMap>
 	
 	<select id="findAccountById" parameterType="Integer" resultMap="Account">
@@ -97,6 +112,6 @@
 			u.del_flg = false
 			AND a.del_flg = false
 			AND username = #{username}
-		ORDER BY a.account_name, c.name;
+		ORDER BY c.name;
 	</select>
 </mapper>
