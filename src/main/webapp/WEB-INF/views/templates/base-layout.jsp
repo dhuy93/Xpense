@@ -5,14 +5,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<tiles:insertAttribute name="lib" ignore="true" />
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div><tiles:insertAttribute name="header" /></div>  
+	<div><tiles:insertAttribute name="header" /></div>
+	
 	<div style="float:left;padding:10px;width:15%;"><tiles:insertAttribute name="menu" /></div>  
 	<div style="float:left;padding:10px;width:80%;border-left:1px solid pink;">  
 		<tiles:insertAttribute name="body" />

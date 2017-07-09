@@ -5,6 +5,7 @@
 <tiles-definitions>  
 	<definition name="base.definition"  
 		template="/WEB-INF/views/templates/base-layout.jsp">
+		<put-attribute name="lib" value="/WEB-INF/views/common/lib.jsp" />
 		<put-attribute name="title" value="" />  
 		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />  
 		<put-attribute name="menu" value="/WEB-INF/views/common/menu.jsp" />  
@@ -15,9 +16,11 @@
 	  
 
 	<definition name="dashboard/*/*" extends="base.definition">
+		<put-attribute name="lib" value="/WEB-INF/views/common/lib.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/dashboard/{1}/{2}.jsp" type="template" />
 	</definition>
 	<definition name="/*" template="/WEB-INF/views/templates/simple-layout.jsp">
+		<put-attribute name="lib" value="/WEB-INF/views/common/lib.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" type="template" />
 	</definition>
 
