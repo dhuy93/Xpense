@@ -28,43 +28,53 @@
 		<result column="account_name" property="accountName" />
 		<result column="del_flg" property="delFlg" />
 <!-- 		<association property="user" column="user_id" resultMap="User" /> -->
-		<result column="user.user_id" property="userId" />
-		<result column="user.username" property="username" />
-		<result column="user.password" property="password"/>
-		<result column="user.created_date" property="createdDate" />
-		<result column="user.del_flg" property="delFlg" />
-		<result column="user.salt" property="salt" />
-		<result column="user.role_id" property="roleId" />
-		<result column="user.role_name" property="roleName" />
+		<result column="user_id" property="user.userId" />
+		<result column="username" property="user.username" />
+		<result column="password" property="user.password"/>
+		<result column="created_date" property="user.createdDate" />
+		<result column="user_del_flg" property="user.delFlg" />
+		<result column="salt" property="user.salt" />
+		<result column="role_id" property="user.roleId" />
+		<result column="role_name" property="user.roleName" />
 <!-- 		<association property="balance" resultMap="Balance" /> -->
-		<result column="balance.account_id" property="accountId" />
-		<result column="balance.currency_id" property="currencyId" />
-		<result column="balance.amount" property="amount" />
-		<result column="balance.del_flg" property="delFlg" />
+		<result column="balance_account_id" property="balance.accountId" />
+		<result column="balance_currency_id" property="balance.currencyId" />
+		<result column="amount" property="balance.amount" />
+		<result column="balance_del_flg" property="balance.delFlg" />
 <!-- 		<association property="currency" column="currency_id" resultMap="Currency" /> -->
-		<result column="currency.currency_id" property="currencyId" />
-		<result column="currency.name" property="name" />
-		<result column="currency.del_flg" property="delFlg" />
+		<result column="currency_id" property="currency.currencyId" />
+		<result column="currency_name" property="currency.name" />
+		<result column="currency_del_flg" property="currency.delFlg" />
 	</resultMap>
 	
-	<select id="findAccountById" parameterType="Integer" resultMap="Account">
-		SELECT 
+	<select id="findAccountByIdAndCurrencyId" parameterType="java.util.Map" resultMap="Account">
+		SELECT
 			a.account_id, 
 			a.account_name,
-			u.user_id,
-			u.username,
-			u.password,
-			u.created_date,
-			u.del_flg,
-			u.salt,
-			u.role_id
+			u.user_id AS user_id,
+			u.username AS username,
+			u.password AS password,
+			u.created_date AS created_date,
+			u.del_flg AS user_del_flg,
+			u.salt AS salt,
+			u.role_id AS role_id,
+			b.account_id AS balance_account_id,
+			b.currency_id AS balance_currency_id,
+			b.del_flg AS balance_del_flg,
+			b.amount AS amount,
+			c.currency_id AS currency_id,
+			c.name AS currency_name,
+			c.del_flg AS currency_del_flg
 		FROM
 			account a JOIN "user" u ON a.user_id = u.user_id
+			JOIN balance b ON b.account_id = a.account_id
+			JOIN currency c ON b.currency_id = c.currency_id
 		WHERE
 			a.account_id = #{accountId}
-			AND a.del_flg = false
+			AND c.currency_id = #{currencyId}
 			AND u.del_flg = false
-		
+			AND a.del_flg = false
+		ORDER BY c.name;
 	</select>
 	
 	<select id="findAllAccountByUserId" parameterType="Integer" resultMap="Account">
@@ -90,20 +100,20 @@
 		SELECT
 			a.account_id, 
 			a.account_name,
-			u.user_id,
-			u.username,
-			u.password,
-			u.created_date,
-			u.del_flg,
-			u.salt,
-			u.role_id,
-			b.account_id,
-			b.currency_id,
-			b.del_flg,
-			b.amount,
-			c.currency_id,
-			c.name,
-			c.del_flg
+			u.user_id AS user_id,
+			u.username AS username,
+			u.password AS password,
+			u.created_date AS created_date,
+			u.del_flg AS user_del_flg,
+			u.salt AS salt,
+			u.role_id AS role_id,
+			b.account_id AS balance_account_id,
+			b.currency_id AS balance_currency_id,
+			b.del_flg AS balance_del_flg,
+			b.amount AS amount,
+			c.currency_id AS currency_id,
+			c.name AS currency_name,
+			c.del_flg AS currency_del_flg
 		FROM
 			account a JOIN "user" u ON a.user_id = u.user_id
 			JOIN balance b ON b.account_id = a.account_id

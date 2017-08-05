@@ -16,6 +16,7 @@ public class Account {
 	private User user;
 	private Balance balance;
 	private Currency currency;
+	private String encryptedId;
 
 	/**
 	 * @return the accountId
@@ -103,6 +104,20 @@ public class Account {
 	 */
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
+	}
+
+	/**
+	 * @return the encryptedId
+	 */
+	public String getEncryptedId() {
+		return encryptedId;
+	}
+
+	/**
+	 * @param encryptedId the encryptedId to set
+	 */
+	public void setEncryptedId(String encryptedId) {
+		this.encryptedId = encryptedId;
 	}
 
 }

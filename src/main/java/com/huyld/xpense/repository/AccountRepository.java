@@ -4,6 +4,7 @@
 package com.huyld.xpense.repository;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import com.huyld.xpense.model.Account;
 @Component
 public interface AccountRepository {
 
-	public Account findAccountById(int accountId);
+	public Account findAccountByIdAndCurrencyId(Map<String, Object> params);
 	
 	/**
 	 * Find all accounts belong to a specific user

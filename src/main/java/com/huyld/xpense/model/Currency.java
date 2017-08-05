@@ -13,6 +13,7 @@ public class Currency {
 	private String currencyId;
 	private String name;
 	private boolean delFlg;
+	private String encryptedId;
 
 	/**
 	 * @return the currencyId
@@ -57,5 +58,19 @@ public class Currency {
 	 */
 	public void setDelFlg(boolean delFlg) {
 		this.delFlg = delFlg;
+	}
+
+	/**
+	 * @return the encryptedId
+	 */
+	public String getEncryptedId() {
+		return encryptedId;
+	}
+
+	/**
+	 * @param encryptedId the encryptedId to set
+	 */
+	public void setEncryptedId(String encryptedId) {
+		this.encryptedId = encryptedId;
 	}
 }

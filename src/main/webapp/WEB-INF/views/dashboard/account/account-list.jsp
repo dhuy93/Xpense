@@ -1,33 +1,43 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<h1>Account List</h1>
 		
 		<div class="col-lg-8 col-lg-offset-2">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th width="60%">Name</th>
-						<th width="30%">Balance</th>
-						<th width="10%">Currency</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${accountList}" var="account">
-						<tr class="">
-							<td>${account.accountName}</td>
-							<td>${account.balance.amount}</td>
-							<td>${account.currency.name}</td>
-							<td>
-								<a href="#">
-									<span class="glyphicon glyphicon-option-horizontal" style="border: 1px solid black; border-radius: 2px;font-size: 20px;"></span>
-								</a>
-							</td>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th width="60%">Name</th>
+							<th width="30%">Balance</th>
+							<th width="10%">Currency</th>
+							<th></th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<c:forEach items="${accountList}" var="account" varStatus="loop">
+							<tr class="">
+								<td>${account.accountName}</td>
+								<td>${account.balance.amount}</td>
+								<td>${account.currency.name}</td>
+								<td>
+									<div class="dropdown">
+										<button class="btn btn-default dropdown-toggle" type="button"
+											id="balance${loop.index}" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="true">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="balance${loop.index}">
+											<li><a href="${pageContext.request.contextPath}/dashboard/account/edit/${account.encryptedId}/${account.currency.encryptedId}">Edit</a></li>
+											<li><a href="${pageContext.request.contextPath}/dashboard/account/delete/${account.encryptedId}">Delete</a></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 
 
 			<!-- Pagination -->

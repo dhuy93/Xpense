@@ -4,6 +4,7 @@
 package com.huyld.xpense.service.account;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,11 @@ public class AccountServiceImpl implements AccountService {
 	private AccountRepository accountRepository;
 
 	/* (non-Javadoc)
-	 * @see com.huyld.xpense.service.AccountService#findAccountById(int)
+	 * @see com.huyld.xpense.service.AccountService#findAccountByIdAndCurrencyId(java.util.Map)
 	 */
 	@Override
-	public Account findAccountById(int accountId) {
-		return accountRepository.findAccountById(accountId);
+	public Account findAccountByIdAndCurrencyId(Map<String, Object> params) {
+		return accountRepository.findAccountByIdAndCurrencyId(params);
 	}
 
 	@Override

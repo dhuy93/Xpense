@@ -11,11 +11,20 @@
 </head>
 <body>
 	<div><tiles:insertAttribute name="header" /></div>
-	
-	<div style="float:left;padding:10px;width:15%;"><tiles:insertAttribute name="menu" /></div>  
-	<div style="float:left;padding:10px;width:80%;border-left:1px solid pink;">  
-		<tiles:insertAttribute name="body" />
-	</div>  
-	<div style="clear:both"><tiles:insertAttribute name="footer" /></div>  
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2" style="top: 51px;"><tiles:insertAttribute name="menu" /></div>  
+			<div class="col-sm-9 col-md-10 main" style="top: 71px;">  
+				<tiles:insertAttribute name="body" />
+			</div>
+		</div>
+	</div>
+
+	<footer class="footer">
+		<div class="container">
+			<tiles:insertAttribute name="footer" />
+		</div>
+	</footer>
 </body>
 </html>

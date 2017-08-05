@@ -4,6 +4,7 @@
 package com.huyld.xpense.service.account;
 
 import java.util.Collection;
+import java.util.Map;
 
 import com.huyld.xpense.model.Account;
 
@@ -13,7 +14,7 @@ import com.huyld.xpense.model.Account;
  */
 public interface AccountService {
 
-	public Account findAccountById(int accountId);
+	public Account findAccountByIdAndCurrencyId(Map<String, Object> params);
 	
 	/**
 	 * Find all accounts belong to a specific user
