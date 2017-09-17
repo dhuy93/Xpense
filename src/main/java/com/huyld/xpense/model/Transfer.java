@@ -4,6 +4,7 @@
 package com.huyld.xpense.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -23,6 +24,7 @@ public class Transfer {
 	private String amountStr;
 	private String currencyId;
 	private boolean delFlg;
+	private Timestamp lastModified;
 
 	/**
 	 * @return the transferId
@@ -171,5 +173,19 @@ public class Transfer {
 	 */
 	public void setDelFlg(boolean delFlg) {
 		this.delFlg = delFlg;
+	}
+
+	/**
+	 * @return the lastModified
+	 */
+	public Timestamp getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * @param lastModified the lastModified to set
+	 */
+	public void setLastModified(Timestamp lastModified) {
+		this.lastModified = lastModified;
 	}
 }

@@ -4,6 +4,7 @@
 package com.huyld.xpense.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -27,6 +28,7 @@ public class Expense {
 	private boolean cleared;
 	private int payFor;
 	private boolean delFlg;
+	private Timestamp lastModified;
 
 	/**
 	 * @return the expenseId
@@ -235,6 +237,20 @@ public class Expense {
 	 */
 	public void setDelFlg(boolean delFlg) {
 		this.delFlg = delFlg;
+	}
+
+	/**
+	 * @return the lastModified
+	 */
+	public Timestamp getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * @param lastModified the lastModified to set
+	 */
+	public void setLastModified(Timestamp lastModified) {
+		this.lastModified = lastModified;
 	}
 
 }

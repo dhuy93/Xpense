@@ -4,7 +4,7 @@
 package com.huyld.xpense.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * @author ldhuy
@@ -19,7 +19,7 @@ public class Balance {
 	private String startAmountStr;
 	private BigDecimal amount;
 	private boolean delFlg;
-	private Date lastModified;
+	private Timestamp lastModified;
 
 	/**
 	 * @return the accountId
@@ -112,14 +112,14 @@ public class Balance {
 	/**
 	 * @return the lastModified
 	 */
-	public Date getLastModified() {
+	public Timestamp getLastModified() {
 		return lastModified;
 	}
 
 	/**
 	 * @param lastModified the lastModified to set
 	 */
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(Timestamp lastModified) {
 		this.lastModified = lastModified;
 	}
 }

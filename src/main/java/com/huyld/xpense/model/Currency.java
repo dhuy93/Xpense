@@ -3,7 +3,7 @@
  */
 package com.huyld.xpense.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * @author ldhuy
@@ -16,7 +16,7 @@ public class Currency {
 	private String name;
 	private boolean delFlg;
 	private String encryptedId;
-	private Date lastModified;
+	private Timestamp lastModified;
 
 	/**
 	 * @return the currencyId
@@ -80,14 +80,14 @@ public class Currency {
 	/**
 	 * @return the lastModified
 	 */
-	public Date getLastModified() {
+	public Timestamp getLastModified() {
 		return lastModified;
 	}
 
 	/**
 	 * @param lastModified the lastModified to set
 	 */
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(Timestamp lastModified) {
 		this.lastModified = lastModified;
 	}
 }

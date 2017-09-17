@@ -3,6 +3,8 @@
  */
 package com.huyld.xpense.model;
 
+import java.sql.Timestamp;
+
 /**
  * @author ldhuy
  * Created on 16/10/2016
@@ -13,6 +15,7 @@ public class Category {
 	private int categoryId;
 	private String name;
 	private boolean delFlg;
+	private Timestamp lastModified;
 
 	/**
 	 * @return the categoryId
@@ -57,6 +60,20 @@ public class Category {
 	 */
 	public void setDelFlg(boolean delFlg) {
 		this.delFlg = delFlg;
+	}
+
+	/**
+	 * @return the lastModified
+	 */
+	public Timestamp getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * @param lastModified the lastModified to set
+	 */
+	public void setLastModified(Timestamp lastModified) {
+		this.lastModified = lastModified;
 	}
 
 }
