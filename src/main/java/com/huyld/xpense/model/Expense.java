@@ -20,6 +20,7 @@ public class Expense {
 	private int accountId;
 	private String description;
 	private BigDecimal amount;
+	private String amountStr;
 	private String currencyId;
 	private boolean isDebt;
 	private Date deadline;
@@ -130,6 +131,20 @@ public class Expense {
 	 */
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * @return the amountStr
+	 */
+	public String getAmountStr() {
+		return amountStr;
+	}
+
+	/**
+	 * @param amountStr the amountStr to set
+	 */
+	public void setAmountStr(String amountStr) {
+		this.amountStr = amountStr;
 	}
 
 	/**

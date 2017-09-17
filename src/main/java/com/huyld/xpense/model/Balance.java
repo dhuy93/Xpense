@@ -16,6 +16,7 @@ public class Balance {
 	private int accountId;
 	private String currencyId;
 	private BigDecimal startAmount;
+	private String startAmountStr;
 	private BigDecimal amount;
 	private boolean delFlg;
 	private Date lastModified;
@@ -43,6 +44,14 @@ public class Balance {
 	}
 
 	/**
+	 * @param currencyId
+	 *            the currencyId to set
+	 */
+	public void setCurrencyId(String currencyId) {
+		this.currencyId = currencyId;
+	}
+
+	/**
 	 * @return the startAmount
 	 */
 	public BigDecimal getStartAmount() {
@@ -57,11 +66,17 @@ public class Balance {
 	}
 
 	/**
-	 * @param currencyId
-	 *            the currencyId to set
+	 * @return the startAmountStr
 	 */
-	public void setCurrencyId(String currencyId) {
-		this.currencyId = currencyId;
+	public String getStartAmountStr() {
+		return startAmountStr;
+	}
+
+	/**
+	 * @param startAmountStr the startAmountStr to set
+	 */
+	public void setStartAmountStr(String startAmountStr) {
+		this.startAmountStr = startAmountStr;
 	}
 
 	/**
