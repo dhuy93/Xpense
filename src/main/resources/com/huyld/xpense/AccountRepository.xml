@@ -16,17 +16,21 @@
 		<result column="currency_id" property="currencyId" />
 		<result column="name" property="name" />
 		<result column="del_flg" property="delFlg" />
+		<result column="last_modified" property="lastModified" />
 	</resultMap>
 	<resultMap type="com.huyld.xpense.model.Balance" id="Balance">
 		<result column="account_id" property="accountId" />
 		<result column="currency_id" property="currencyId" />
+		<result column="start_amount" property="startAmount" />
 		<result column="amount" property="amount" />
 		<result column="del_flg" property="delFlg" />
+		<result column="last_modified" property="lastModified" />
 	</resultMap>
 	<resultMap type="com.huyld.xpense.model.Account" id="Account">
 		<result column="account_id" property="accountId" />
 		<result column="account_name" property="accountName" />
 		<result column="del_flg" property="delFlg" />
+		<result column="last_modified" property="lastModified" />
 <!-- 		<association property="user" column="user_id" resultMap="User" /> -->
 		<result column="user_id" property="user.userId" />
 		<result column="username" property="user.username" />
@@ -39,18 +43,21 @@
 <!-- 		<association property="balance" resultMap="Balance" /> -->
 		<result column="balance_account_id" property="balance.accountId" />
 		<result column="balance_currency_id" property="balance.currencyId" />
-		<result column="amount" property="balance.amount" />
+		<result column="start_amount" property="balance.startAmount" />
 		<result column="balance_del_flg" property="balance.delFlg" />
+		<result column="balance_last_modified" property="balance.lastModified" />
 <!-- 		<association property="currency" column="currency_id" resultMap="Currency" /> -->
 		<result column="currency_id" property="currency.currencyId" />
 		<result column="currency_name" property="currency.name" />
 		<result column="currency_del_flg" property="currency.delFlg" />
+		<result column="currency_last_modified" property="currency.lastModified" />
 	</resultMap>
 	
 	<select id="findAccountByIdAndCurrencyId" parameterType="java.util.Map" resultMap="Account">
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.last_modified,
 			u.user_id AS user_id,
 			u.username AS username,
 			u.password AS password,
@@ -61,7 +68,7 @@
 			b.account_id AS balance_account_id,
 			b.currency_id AS balance_currency_id,
 			b.del_flg AS balance_del_flg,
-			b.amount AS amount,
+			b.start_amount AS start_amount,
 			c.currency_id AS currency_id,
 			c.name AS currency_name,
 			c.del_flg AS currency_del_flg
@@ -81,6 +88,7 @@
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.last_modified,
 			u.user_id,
 			u.username,
 			u.password,
@@ -100,6 +108,7 @@
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.last_modified,
 			u.user_id AS user_id,
 			u.username AS username,
 			u.password AS password,
@@ -110,7 +119,7 @@
 			b.account_id AS balance_account_id,
 			b.currency_id AS balance_currency_id,
 			b.del_flg AS balance_del_flg,
-			b.amount AS amount,
+			b.start_amount AS start_amount,
 			c.currency_id AS currency_id,
 			c.name AS currency_name,
 			c.del_flg AS currency_del_flg

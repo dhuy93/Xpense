@@ -3,6 +3,8 @@
  */
 package com.huyld.xpense.model;
 
+import java.util.Date;
+
 /**
  * @author ldhuy
  * Created on 16/10/2016
@@ -14,6 +16,7 @@ public class Currency {
 	private String name;
 	private boolean delFlg;
 	private String encryptedId;
+	private Date lastModified;
 
 	/**
 	 * @return the currencyId
@@ -72,5 +75,19 @@ public class Currency {
 	 */
 	public void setEncryptedId(String encryptedId) {
 		this.encryptedId = encryptedId;
+	}
+
+	/**
+	 * @return the lastModified
+	 */
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * @param lastModified the lastModified to set
+	 */
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 }

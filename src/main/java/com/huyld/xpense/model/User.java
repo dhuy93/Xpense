@@ -6,6 +6,8 @@ package com.huyld.xpense.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.huyld.xpense.util.GlobalUtil;
+
 /**
  * @author ldhuy 
  * Created on 01/08/2017
@@ -27,6 +29,7 @@ public class User implements Serializable {
 	private String salt;
 	private short roleId;
 	private String roleName;
+	private String encryptedId;
 
 	/**
 	 * @return the userId
@@ -153,6 +156,20 @@ public class User implements Serializable {
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	/**
+	 * @return the encryptedId
+	 */
+	public String getEncryptedId() {
+		return GlobalUtil.unescapeHtml(encryptedId);
+	}
+
+	/**
+	 * @param encryptedId the encryptedId to set
+	 */
+	public void setEncryptedId(String encryptedId) {
+		this.encryptedId = GlobalUtil.escapeHtml(encryptedId);
 	}
 
 }
