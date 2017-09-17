@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.huyld.xpense.repository.CurrencyRepository">
+	<resultMap type="com.huyld.xpense.model.Currency" id="Currency">
+		<result column="currency_id" property="currencyId" />
+		<result column="name" property="name" />
+		<result column="del_flg" property="delFlg" />
+		<result column="last_modified" property="lastModified" />
+	</resultMap>
+	
+	<select id="findAllCurrency" resultMap="Currency">
+		SELECT
+			currency_id,
+			"name",
+			del_flg,
+			last_modified
+		FROM
+			currency
+		WHERE
+			del_flg = FALSE;
+	</select>
+</mapper>
