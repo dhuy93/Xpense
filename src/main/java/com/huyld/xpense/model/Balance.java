@@ -3,6 +3,7 @@
  */
 package com.huyld.xpense.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,8 +15,8 @@ public class Balance {
 
 	private int accountId;
 	private String currencyId;
-	private float startAmount;
-	private float amount;
+	private BigDecimal startAmount;
+	private BigDecimal amount;
 	private boolean delFlg;
 	private Date lastModified;
 
@@ -44,14 +45,14 @@ public class Balance {
 	/**
 	 * @return the startAmount
 	 */
-	public float getStartAmount() {
+	public BigDecimal getStartAmount() {
 		return startAmount;
 	}
 
 	/**
 	 * @param startAmount the startAmount to set
 	 */
-	public void setStartAmount(float startAmount) {
+	public void setStartAmount(BigDecimal startAmount) {
 		this.startAmount = startAmount;
 	}
 
@@ -66,7 +67,7 @@ public class Balance {
 	/**
 	 * @return the amount
 	 */
-	public float getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
@@ -74,7 +75,7 @@ public class Balance {
 	 * @param amount
 	 *            the amount to set
 	 */
-	public void setAmount(float amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
