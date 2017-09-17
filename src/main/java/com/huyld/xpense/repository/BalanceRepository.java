@@ -3,6 +3,8 @@
  */
 package com.huyld.xpense.repository;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 import com.huyld.xpense.model.Balance;
@@ -15,5 +17,5 @@ import com.huyld.xpense.model.Balance;
 @Component
 public interface BalanceRepository {
 
-	public Balance findBalanceByAccountAndCurrency(int accountId, String currencyId);
+	public Balance findBalanceByAccountAndCurrency(Map<String, Object> params);
 }
