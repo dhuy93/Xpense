@@ -23,8 +23,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class SecurityUtil {
 	private static SecurityUtil instance = null;
-	private static byte[] privateKey = "HqqWAwVFDtm0BaL6XRDO".getBytes();
-	private static byte[] initializationVector = "WCs9HS".getBytes();
+	private static byte[] privateKey = "63xr4na160joonfs1rlyxw5bbajanzd8".getBytes();
+	private static byte[] initializationVector = "5usgn13snw358jr4".getBytes();
 	private static Cipher encryptor;
 	private static Cipher decryptor;
 	private static final int RADIX = 16;

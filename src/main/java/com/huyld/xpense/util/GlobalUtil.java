@@ -14,6 +14,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.huyld.xpense.model.User;
+import com.huyld.xpense.model.UserDetails;
 
 /**
  * @author ldhuy
@@ -40,6 +45,26 @@ public class GlobalUtil {
 		}
 		return props.getProperty(key);
 	}
+	
+	public static String escapeHtml(String input) {
+		String result = "";
+		try {
+			result = URLEncoder.encode(input, encoding);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public static String unescapeHtml(String input) {
+		String result = "";
+		try {
+			result = URLDecoder.decode(input, encoding);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	/**
 	 * @return the timeFormat
@@ -53,5 +78,12 @@ public class GlobalUtil {
 	 */
 	public static Locale getLocale() {
 		return locale;
+	}
+
+	public static User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+		User user = userDetails.getUser();
+		return user;
 	}
 }
