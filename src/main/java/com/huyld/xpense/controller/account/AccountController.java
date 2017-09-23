@@ -4,27 +4,39 @@
 package com.huyld.xpense.controller.account;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.huyld.xpense.model.Account;
+import com.huyld.xpense.model.Balance;
 import com.huyld.xpense.model.Currency;
 import com.huyld.xpense.service.account.AccountService;
+import com.huyld.xpense.service.balance.BalanceService;
+import com.huyld.xpense.service.currency.CurrencyService;
 import com.huyld.xpense.util.GlobalUtil;
 import com.huyld.xpense.util.SecurityUtil;
+import com.huyld.xpense.validator.AccountValidator;
 
 /**
  * @author ldhuy
@@ -34,9 +46,27 @@ import com.huyld.xpense.util.SecurityUtil;
 @Controller
 @RequestMapping(value="/dashboard/account")
 public class AccountController {
-	
+
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+	BalanceService balanceService;
+
+	@Autowired
+	CurrencyService currencyService;
+
+	@Autowired
+	AccountValidator accountValidator;
+
+	@Autowired
+	private ApplicationContext appContext;
+	
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(accountValidator);
+	}
 
 	private int pageSize = 0;
 
@@ -46,7 +76,7 @@ public class AccountController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/")
+	@RequestMapping(value = "/")
 	private String accountList(@RequestParam(required = false) Integer page, Model model) {
 		// Get list of accounts belongs to user
 		User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,6 +89,8 @@ public class AccountController {
 			Currency currency = account.getCurrency();
 			currency.setEncryptedId(SecurityUtil.encrypt(currency.getCurrencyId()));
 		}
+
+		// TODO: sum up all incomes and expenses of account
 
 		PagedListHolder<Account> pagedListHolder = new PagedListHolder<Account>(accountList);
 		if (pageSize == 0) {
@@ -84,16 +116,43 @@ public class AccountController {
 		}
 		model.addAttribute("page", page);
 
-		// Add account list to model
-//		model.addAttribute("accountList", accountList);
-		
 		return "dashboard/account/account-list";
 	}
 
-	@RequestMapping(value = "/edit/{encryptedId}/{currencyEncryptedId}")
-	private String editAccount(@PathVariable("encryptedId") String accountEncryptedIdStr, @PathVariable("currencyEncryptedId") String currencyEncryptedIdStr, Model model) {
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	private String displayAccountAddForm(Model model) {
+		Account account = new Account();
+		account.setLastModified(new Timestamp(System.currentTimeMillis()));
+		account.setLastModifiedStr(SecurityUtil.encrypt(account.getLastModified().toString()));
+		model.addAttribute("account", account);
+
+		// Settings for JSP
+		populateModelAdd(model);
+
+		return "dashboard/account/account-edit";
+	}
+
+	@RequestMapping(value = "/add/submit")
+	private String addAccount(@ModelAttribute("account") @Validated Account account, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("account", account);
+			populateModelAdd(model);
+			return "dashboard/account/account-edit";
+		}
+
+		account.setUser(GlobalUtil.getCurrentUser());
+		String currencyId = SecurityUtil.decrypt(account.getCurrency().getEncryptedId());
+		account.getCurrency().setCurrencyId(currencyId);
+		int successCount = accountService.addAccount(account);
+		System.out.println(successCount + " account inserted");
+		return "redirect:/dashboard/account/";
+	}
+
+	@RequestMapping(value = "/edit/{encryptedId}/{currencyEncryptedId}", method = RequestMethod.GET)
+	private String displayAccountEditForm(@PathVariable("encryptedId") String accountEncryptedIdStr, @PathVariable("currencyEncryptedId") String currencyEncryptedIdStr, Model model) {
 		String accountIdStr = SecurityUtil.decrypt(accountEncryptedIdStr);
-		String currencyIdStr = SecurityUtil.decrypt(currencyEncryptedIdStr);
+		String currencyId = SecurityUtil.decrypt(currencyEncryptedIdStr);
 		int accountId;
 		try {
 			accountId = Integer.valueOf(accountIdStr);
@@ -103,15 +162,76 @@ public class AccountController {
 			model.addAttribute("errorMsg", "Invalid ID");
 			return "error/custom_error";
 		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("accountId", accountId);
-		params.put("currencyId", currencyIdStr);
-		Account account = accountService.findAccountByIdAndCurrencyId(params);
+
+		Account account = accountService.findAccountByIdAndCurrencyId(accountId, currencyId);
 		account.setEncryptedId(accountEncryptedIdStr);
-		account.getCurrency().setEncryptedId(currencyEncryptedIdStr);
+		account.getCurrency().setEncryptedId(SecurityUtil.encrypt(account.getCurrency().getCurrencyId()));
+		account.setLastModifiedStr(SecurityUtil.encrypt(account.getLastModified().toString()));
+		account.getBalance().setStartAmountStr(account.getBalance().getStartAmount().toString());
 		model.addAttribute("account", account);
+
+		// Settings for JSP
+		populateModelEdit(model, account);
 
 		return "dashboard/account/account-edit";
 	}
 
+	@RequestMapping(value = "/edit/{encryptedId}/{currencyEncryptedId}/submit", method = RequestMethod.POST)
+	private String updateAccount(@ModelAttribute("account") @Validated Account account, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("account", account);
+			populateModelEdit(model, account);
+			return "dashboard/account/account-edit";
+		}
+
+		int accountId = Integer.parseInt(SecurityUtil.decrypt(account.getEncryptedId()), 10);
+		account.setAccountId(accountId);
+		String currencyId = SecurityUtil.decrypt(account.getCurrency().getEncryptedId());
+		Balance balance = balanceService.findBalanceByAccountAndCurrency(accountId, currencyId);
+		balance.setStartAmount(account.getBalance().getStartAmount());
+		account.setBalance(balance);
+		account.setUser(GlobalUtil.getCurrentUser());
+		int successCount = accountService.updateAccount(account);
+		if (successCount == 0) {
+			String msg = appContext.getMessage("account.update.error", null, null, GlobalUtil.getLocale());
+			model.addAttribute("msg", msg);
+			model.addAttribute("msgType", "alert");
+		} else {
+			String msg = appContext.getMessage("account.update.success", null, null, GlobalUtil.getLocale());
+			model.addAttribute("msg", msg);
+			model.addAttribute("msgType", "success");
+		}
+		return "redirect:/dashboard/account/";
+	}
+
+	private void populateDefaultModel(Model model) {
+		// Get currency list from DB
+		List<Currency> currencyList = (List<Currency>) currencyService.findAllCurrency();
+		Map<String, String> currencies = new LinkedHashMap<String, String>();
+		for (Currency currency : currencyList) {
+			String encryptedStr = SecurityUtil.encrypt(currency.getCurrencyId());
+			currencies.put(encryptedStr, currency.getName());
+		}
+		model.addAttribute("currencyList", currencies);
+	}
+
+	private void populateModelAdd(Model model) {
+		model.addAttribute("isEdit", false);
+		model.addAttribute("submitPath", "add");
+		model.addAttribute("saveBtn", appContext.getMessage("account.add.button.add", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("cancelBtn", appContext.getMessage("account.add.button.cancel", null, null, GlobalUtil.getLocale()));
+		populateDefaultModel(model);
+		// TODO: get labels from properties files
+	}
+
+	private void populateModelEdit(Model model, Account account) {
+		model.addAttribute("isEdit", true);
+		model.addAttribute("submitPath",
+				"edit/" + account.getEncryptedId() + "/" + account.getCurrency().getEncryptedId());
+		model.addAttribute("saveBtn", appContext.getMessage("account.edit.button.save", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("cancelBtn", appContext.getMessage("account.edit.button.cancel", null, null, GlobalUtil.getLocale()));
+		populateDefaultModel(model);
+		// TODO: get labels from properties files
+	}
 }

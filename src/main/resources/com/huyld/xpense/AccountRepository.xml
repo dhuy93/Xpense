@@ -133,4 +133,55 @@
 			AND username = #{username}
 		ORDER BY c.name;
 	</select>
+
+	<insert id="addAccount" parameterType="Account">
+		WITH inserted_account AS (
+			INSERT INTO account(
+				account_name,
+				del_flg,
+				user_id,
+				last_modified
+			) VALUES (
+				#{accountName},
+				false,
+				#{user.userId},
+				now()
+			) RETURNING account_id
+		)
+		INSERT INTO balance(
+			account_id,
+			currency_id,
+			del_flg,
+			start_amount,
+			last_modified)	
+		SELECT
+			account_id,
+			#{currency.currencyId},
+			false,
+			#{balance.startAmount},
+			now()
+		FROM inserted_account;
+	</insert>
+
+	<update id="updateAccount" parameterType="Account">
+		UPDATE account
+		SET
+			account_id=#{accountId},
+			account_name=#{accountName},
+			del_flg=#{delFlg},
+			user_id=#{user.userId},
+			last_modified=now()
+		WHERE
+			account_id = #{accountId}
+			AND last_modified = #{lastModified};
+		UPDATE
+			balance
+		SET
+			start_amount=#{balance.startAmount},
+			last_modified=now()
+		WHERE
+			account_id = #{accountId}
+			AND currency_id = #{currency.currencyId}
+			AND last_modified = #{balance.lastModified};
+	</update>
 </mapper>
