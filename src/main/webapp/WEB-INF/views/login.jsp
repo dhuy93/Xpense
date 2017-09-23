@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UFT-8">
 <title>Login</title>
-<style>
+<!-- <style>
 .error {
 	padding: 15px;
 	margin-bottom: 20px;
@@ -36,13 +36,50 @@
 	-moz-border-radius: 2px;
 	border: 1px solid #000;
 }
-</style>
+</style> -->
 </head>
 <body>
 
 	<h1>Spring Security Login Form</h1>
 
-	<div id="login-box">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<div class="login-panel panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Please Sign In</h3>
+					</div>
+					<div class="panel-body">
+						<form name='loginForm'
+							action="<c:url value='/j_spring_security_check' />" method='POST'>
+							<fieldset>
+								<div class="form-group">
+									<input class="form-control" placeholder="Username"
+										name="username" type="text" autofocus>
+								</div>
+								<div class="form-group">
+									<input class="form-control" placeholder="Password"
+										name="password" type="password" value="">
+								</div>
+
+								<!-- Change this to a button or input when using this as a form -->
+								<input name="submit" type="submit" value="submit"
+									class="btn btn-lg btn-success btn-block" />
+							</fieldset>
+
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<%-- <div id="login-box">
 
 		<h2>Login with Username and Password</h2>
 
@@ -75,6 +112,6 @@
 				value="${_csrf.token}" />
 
 		</form>
-	</div>
+	</div> --%>
 </body>
 </html>
