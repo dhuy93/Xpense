@@ -32,3 +32,23 @@ table {
 .message-area {
 	margin: 10px auto;
 }
+
+.heading-text {
+	text-align: center;
+	height: 40px;
+	font-size: 36px;
+	line-height: 1
+}
+
+.heading-tray {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin: 5px auto;
+}
+
+@media screen and (min-width: 768px) {
+	.heading-tray{
+		margin-top: -38px;
+	}
+}

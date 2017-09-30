@@ -1,7 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<h1>Account List</h1>
 
-<a href="${pageContext.request.contextPath}/dashboard/account/add" class="btn btn-primary">Create new account</a>
+<div class="col-lg-10 col-lg-offset-1 col-md-12">
+	<div class="heading-text"><h1>Account</h1></div>
+	<div class="heading-tray">
+		<a href="${pageContext.request.contextPath}/dashboard/account/add" class="btn btn-default glyphicon glyphicon-plus">
+		</a>
+	</div>
+</div>
 <div class="col-lg-10 col-lg-offset-1 col-md-12">
 	<table class="table table-hover table-responsive">
 		<thead>
