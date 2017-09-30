@@ -22,15 +22,23 @@
 			<!-- SIDE MENU -->
 			<tiles:insertAttribute name="menu" />
 		</nav>
-	
-		<!-- BODY -->
-		<tiles:insertAttribute name="body" />
+
+		<div id="page-wrapper">
+			<!-- MESSAGE -->
+			<div class="row">
+				<tiles:insertAttribute name="message" />
+			</div>
+			<!-- BODY -->
+			<div class="row">
+				<tiles:insertAttribute name="body" />
+			</div>
+		</div>
 	</div>
 
-	<footer class="footer">
+	<%-- <footer class="footer">
 		<div class="container">
 			<tiles:insertAttribute name="footer" />
 		</div>
-	</footer>
+	</footer> --%>
 </body>
 </html>

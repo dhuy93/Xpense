@@ -14,6 +14,9 @@
 <!-- Custom Fonts -->
 <link href="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/vendor/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
 
+<!-- Select2 -->
+<link href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet" type="text/css">
+
 
 <!-- jQuery -->
 <script src="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/vendor/jquery/jquery.js"></script>
@@ -27,11 +30,12 @@
 <!-- Morris Charts JavaScript -->
 <script src="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/vendor/raphael/raphael.js"></script>
 <script src="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/vendor/morrisjs/morris.js"></script>
-<script src="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/data/morris-data.js"></script>
 
 <!-- Custom Theme JavaScript -->
 <script src="${pageContext.request.contextPath}/resources/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
 
+<!-- Select2 -->
+<script src="${pageContext.request.contextPath}/resources/js/select2.full.js"></script>
 
 <%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/normalize.css"> --%>
 <%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css"> --%>
