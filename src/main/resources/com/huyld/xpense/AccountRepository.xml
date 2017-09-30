@@ -134,7 +134,7 @@
 		ORDER BY c.name;
 	</select>
 
-	<insert id="addAccount" parameterType="Account">
+	<insert id="addNewAccountAndBalance" parameterType="Account">
 		WITH inserted_account AS (
 			INSERT INTO account(
 				account_name,
@@ -163,10 +163,33 @@
 		FROM inserted_account;
 	</insert>
 
+	<insert id="addNewBalanceForExistingAccount" parameterType="Account">
+		UPDATE account
+		SET
+			account_name=#{accountName},
+			del_flg=#{delFlg},
+			user_id=#{user.userId},
+			last_modified=now()
+		WHERE
+			account_id = #{accountId}
+			AND last_modified = #{lastModified};
+		INSERT INTO balance(
+			account_id,
+			currency_id,
+			del_flg,
+			start_amount,
+			last_modified)	
+		VALUES (
+			#{accountId},
+			#{currency.currencyId},
+			false,
+			#{balance.startAmount},
+			now());
+	</insert>
+
 	<update id="updateAccount" parameterType="Account">
 		UPDATE account
 		SET
-			account_id=#{accountId},
 			account_name=#{accountName},
 			del_flg=#{delFlg},
 			user_id=#{user.userId},

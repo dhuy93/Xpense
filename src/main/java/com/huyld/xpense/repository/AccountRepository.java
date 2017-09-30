@@ -39,7 +39,14 @@ public interface AccountRepository {
 	 * @param account
 	 * @return
 	 */
-	public int addAccount(Account account);
+	public int addNewAccountAndBalance(Account account);
+
+	/**
+	 * Update existing account and add new balance for it
+	 * @param account
+	 * @return
+	 */
+	public int addNewBalanceForExistingAccount(Account account);
 
 	/**
 	 * Update an account to database and return the number of affected row

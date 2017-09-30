@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -27,7 +30,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
 import com.huyld.xpense.model.Account;
 import com.huyld.xpense.model.Balance;
 import com.huyld.xpense.model.Currency;
@@ -60,10 +66,13 @@ public class AccountController {
 	AccountValidator accountValidator;
 
 	@Autowired
+	MessageSource messageSource;
+
+	@Autowired
 	private ApplicationContext appContext;
 	
 
-	@InitBinder
+	@InitBinder("account")
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(accountValidator);
 	}
@@ -144,7 +153,30 @@ public class AccountController {
 		account.setUser(GlobalUtil.getCurrentUser());
 		String currencyId = SecurityUtil.decrypt(account.getCurrency().getEncryptedId());
 		account.getCurrency().setCurrencyId(currencyId);
-		int successCount = accountService.addAccount(account);
+		int successCount = 0; 
+		try {
+			int accountId = Integer.valueOf(SecurityUtil.decrypt(account.getEncryptedId()), 10);
+			// Add new balance for existing account
+			account.setAccountId(accountId);
+			successCount = accountService.addNewBalanceForExistingAccount(account);
+		} catch (NumberFormatException e) {
+			// Could not parse the ID of the account. Thus this account is considered as 
+			// new account and inserted to DB
+			successCount = accountService.addNewAccountAndBalance(account);
+		} catch (DuplicateKeyException e) {
+			// The pair account ID - currency ID already existed in DB
+			// Get error message and display on account adding form
+			String msg = messageSource.getMessage("account.add.error.duplicate.currency", null, GlobalUtil.getLocale());
+			model.addAttribute("msg", msg);
+			model.addAttribute("msgType", "danger");
+			model.addAttribute("account", account);
+			populateModelAdd(model);
+			return "dashboard/account/account-edit";
+		} catch (Exception e) {
+			// Add new account and new balance
+			successCount = accountService.addNewAccountAndBalance(account);
+		}
+
 		System.out.println(successCount + " account inserted");
 		return "redirect:/dashboard/account/";
 	}
@@ -169,6 +201,9 @@ public class AccountController {
 		account.setLastModifiedStr(SecurityUtil.encrypt(account.getLastModified().toString()));
 		account.getBalance().setStartAmountStr(account.getBalance().getStartAmount().toString());
 		model.addAttribute("account", account);
+		Map<String, String> accountNameMap = new HashMap<String, String>();
+		accountNameMap.put(accountEncryptedIdStr, account.getAccountName());
+		model.addAttribute("accountList", accountNameMap);
 
 		// Settings for JSP
 		populateModelEdit(model, account);
@@ -178,7 +213,7 @@ public class AccountController {
 
 	@RequestMapping(value = "/edit/{encryptedId}/{currencyEncryptedId}/submit", method = RequestMethod.POST)
 	private String updateAccount(@ModelAttribute("account") @Validated Account account, BindingResult result,
-			Model model) {
+			Model model, final RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			model.addAttribute("account", account);
 			populateModelEdit(model, account);
@@ -195,12 +230,12 @@ public class AccountController {
 		int successCount = accountService.updateAccount(account);
 		if (successCount == 0) {
 			String msg = appContext.getMessage("account.update.error", null, null, GlobalUtil.getLocale());
-			model.addAttribute("msg", msg);
-			model.addAttribute("msgType", "alert");
+			redirectAttributes.addFlashAttribute("msg", msg);
+			redirectAttributes.addFlashAttribute("msgType", "alert");
 		} else {
 			String msg = appContext.getMessage("account.update.success", null, null, GlobalUtil.getLocale());
-			model.addAttribute("msg", msg);
-			model.addAttribute("msgType", "success");
+			redirectAttributes.addFlashAttribute("msg", msg);
+			redirectAttributes.addFlashAttribute("msgType", "success");
 		}
 		return "redirect:/dashboard/account/";
 	}
@@ -216,7 +251,25 @@ public class AccountController {
 		model.addAttribute("currencyList", currencies);
 	}
 
+	/**
+	 * Load text for labels, buttons, etc
+	 * Get list of accounts belong to user
+	 * Set customized submit path
+	 * @param model
+	 */
 	private void populateModelAdd(Model model) {
+		// Get account list from DB
+		List<Account> accountList = (List<Account>) accountService.findAllAccountByUserName(GlobalUtil.getCurrentUser().getUsername());
+		Map<String, String> accountNameMap = new HashMap<String, String>();
+		for (Account account : accountList) {
+			String encryptedStr = SecurityUtil.encrypt(String.valueOf(account.getAccountId()));
+			accountNameMap.put(encryptedStr, account.getAccountName());
+		}
+		model.addAttribute("accountList", accountNameMap);
+		Gson gson = new Gson();
+		String accountListStr = gson.toJson(accountNameMap);
+		model.addAttribute("accountListJson", accountListStr);
+
 		model.addAttribute("isEdit", false);
 		model.addAttribute("submitPath", "add");
 		model.addAttribute("saveBtn", appContext.getMessage("account.add.button.add", null, null, GlobalUtil.getLocale()));
@@ -225,6 +278,12 @@ public class AccountController {
 		// TODO: get labels from properties files
 	}
 
+	/**
+	 * Load text for labels, buttons, etc
+	 * Set customized submit path
+	 * @param model
+	 * @param account
+	 */
 	private void populateModelEdit(Model model, Account account) {
 		model.addAttribute("isEdit", true);
 		model.addAttribute("submitPath",

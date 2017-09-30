@@ -30,11 +30,18 @@ public interface AccountService {
 	public Collection<Account> findAllAccountByUserName(String username);
 
 	/**
-	 * Insert new account to database and return the number of affected row
+	 * Insert new account and new balance to database and return the number of affected row
 	 * @param account
 	 * @return
 	 */
-	public int addAccount(Account account);
+	public int addNewAccountAndBalance(Account account);
+
+	/**
+	 * Update existing account and add new balance for it
+	 * @param account
+	 * @return
+	 */
+	public int addNewBalanceForExistingAccount(Account account);
 
 	/**
 	 * Update an account to database and return the number of affected row

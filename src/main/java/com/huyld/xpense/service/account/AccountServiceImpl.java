@@ -45,8 +45,13 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public int addAccount(Account account) {
-		return accountRepository.addAccount(account);
+	public int addNewAccountAndBalance(Account account) {
+		return accountRepository.addNewAccountAndBalance(account);
+	}
+
+	@Override
+	public int addNewBalanceForExistingAccount(Account account) {
+		return accountRepository.addNewBalanceForExistingAccount(account);
 	}
 
 	@Override
