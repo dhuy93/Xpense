@@ -45,10 +45,18 @@
 				if (term === '') {
 					return null;
 				}
+
 				$("#account-name").val(term);
-				return {
-					id : '' + new Date().getTime(),
-					text : term
+				if (${isEdit}) {
+					var currentSelection = $(".js-account-name").select2('data')[0];
+					$(".js-account-name").val(null).trigger('change');
+					currentSelection.text = term;
+					return currentSelection;
+				} else {
+					return {
+						id : '' + new Date().getTime(),
+						text : term
+					}
 				}
 			}
 		});
