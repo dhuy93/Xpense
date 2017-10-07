@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="col-lg-10 col-lg-offset-1 col-md-12">
-	<div class="heading-text"><h1>Account</h1></div>
+	<div class="heading-text"><h1>${heading}</h1></div>
 	<div class="heading-tray">
 		<a href="${pageContext.request.contextPath}/dashboard/account/add" class="btn btn-default glyphicon glyphicon-plus">
 		</a>
@@ -11,9 +11,9 @@
 	<table class="table table-hover table-responsive">
 		<thead>
 			<tr>
-				<th width="60%">Name</th>
-				<th width="30%">Balance</th>
-				<th width="10%">Currency</th>
+				<th width="60%">${columnName}</th>
+				<th width="30%">${columnBalance}</th>
+				<th width="10%">${columnCurrency}</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -22,7 +22,7 @@
 				<tr class="">
 					<td>${account.accountName}</td>
 					<td>${account.balance.amount}</td>
-					<td>${account.currency.name}</td>
+					<td>${account.currency.currencyName}</td>
 					<td>
 						<div class="dropdown">
 							<button class="btn btn-default dropdown-toggle" type="button"
@@ -31,8 +31,8 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="balance${loop.index}">
-								<li><a href="${pageContext.request.contextPath}/dashboard/account/edit/${account.encryptedId}/${account.currency.encryptedId}">Edit</a></li>
-								<li><a href="#">Delete</a></li>
+								<li><a href="${pageContext.request.contextPath}/dashboard/account/edit/${account.encryptedId}/${account.currency.encryptedId}">${editBtn}</a></li>
+								<li><a href="#">${deleteBtn}</a></li>
 							</ul>
 						</div>
 					</td>

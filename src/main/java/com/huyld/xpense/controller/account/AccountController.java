@@ -124,6 +124,8 @@ public class AccountController {
 		}
 		model.addAttribute("page", page);
 
+		populateModelAccountList(model);
+
 		return "dashboard/account/account-list";
 	}
 
@@ -219,7 +221,14 @@ public class AccountController {
 			return "dashboard/account/account-edit";
 		}
 
-		int accountId = Integer.parseInt(SecurityUtil.decrypt(account.getEncryptedId()), 10);
+		int accountId = -1;
+		try {
+			accountId = Integer.parseInt(SecurityUtil.decrypt(account.getEncryptedId()), 10);
+		} catch (Exception e) {
+			String msg = appContext.getMessage("account.update.error", null, null, GlobalUtil.getLocale());
+			redirectAttributes.addFlashAttribute("msg", msg);
+			redirectAttributes.addFlashAttribute("msgType", "alert");
+		}
 		account.setAccountId(accountId);
 		String currencyId = SecurityUtil.decrypt(account.getCurrency().getEncryptedId());
 		Balance balance = balanceService.findBalanceByAccountAndCurrency(accountId, currencyId);
@@ -245,9 +254,22 @@ public class AccountController {
 		Map<String, String> currencies = new LinkedHashMap<String, String>();
 		for (Currency currency : currencyList) {
 			String encryptedStr = SecurityUtil.encrypt(currency.getCurrencyId());
-			currencies.put(encryptedStr, currency.getName());
+			currencies.put(encryptedStr, currency.getCurrencyName());
 		}
 		model.addAttribute("currencyList", currencies);
+	}
+
+	/**
+	 * Load text for labels, buttons, etc
+	 * @param model
+	 */
+	private void populateModelAccountList(Model model) {
+		model.addAttribute("heading", appContext.getMessage("account.list.heading", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("columnName", appContext.getMessage("account.list.table.name", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("columnBalance", appContext.getMessage("account.list.table.balance", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("columnCurrency", appContext.getMessage("account.list.table.currency", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("editBtn", appContext.getMessage("account.list.table.edit", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("deleteBtn", appContext.getMessage("account.list.table.delete", null, null, GlobalUtil.getLocale()));
 	}
 
 	/**
@@ -269,10 +291,14 @@ public class AccountController {
 		String accountListStr = gson.toJson(accountNameMap);
 		model.addAttribute("accountListJson", accountListStr);
 
+		model.addAttribute("heading", appContext.getMessage("account.add.heading", null, null, GlobalUtil.getLocale()));
 		model.addAttribute("isEdit", false);
 		model.addAttribute("submitPath", "add");
 		model.addAttribute("saveBtn", appContext.getMessage("account.add.button.add", null, null, GlobalUtil.getLocale()));
 		model.addAttribute("cancelBtn", appContext.getMessage("account.add.button.cancel", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("accountNameLabel", appContext.getMessage("account.add.label.account.name", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("balanceLabel", appContext.getMessage("account.add.label.balance", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("currencyLabel", appContext.getMessage("account.add.label.currency", null, null, GlobalUtil.getLocale()));
 		populateDefaultModel(model);
 		// TODO: get labels from properties files
 	}
@@ -284,11 +310,15 @@ public class AccountController {
 	 * @param account
 	 */
 	private void populateModelEdit(Model model, Account account) {
+		model.addAttribute("heading", appContext.getMessage("account.edit.heading", null, null, GlobalUtil.getLocale()));
 		model.addAttribute("isEdit", true);
 		model.addAttribute("submitPath",
 				"edit/" + account.getEncryptedId() + "/" + account.getCurrency().getEncryptedId());
 		model.addAttribute("saveBtn", appContext.getMessage("account.edit.button.save", null, null, GlobalUtil.getLocale()));
 		model.addAttribute("cancelBtn", appContext.getMessage("account.edit.button.cancel", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("accountNameLabel", appContext.getMessage("account.edit.label.account.name", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("balanceLabel", appContext.getMessage("account.edit.label.balance", null, null, GlobalUtil.getLocale()));
+		model.addAttribute("currencyLabel", appContext.getMessage("account.edit.label.currency", null, null, GlobalUtil.getLocale()));
 		populateDefaultModel(model);
 		// TODO: get labels from properties files
 	}

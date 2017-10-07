@@ -14,7 +14,7 @@
 	</resultMap>
 	<resultMap type="com.huyld.xpense.model.Currency" id="Currency">
 		<result column="currency_id" property="currencyId" />
-		<result column="name" property="name" />
+		<result column="currency_name" property="currencyName" />
 		<result column="del_flg" property="delFlg" />
 		<result column="last_modified" property="lastModified" />
 	</resultMap>
@@ -30,6 +30,7 @@
 		<result column="account_id" property="accountId" />
 		<result column="account_name" property="accountName" />
 		<result column="del_flg" property="delFlg" />
+		<result column="created_date" property="createdDate" />
 		<result column="last_modified" property="lastModified" />
 <!-- 		<association property="user" column="user_id" resultMap="User" /> -->
 		<result column="user_id" property="user.userId" />
@@ -48,15 +49,16 @@
 		<result column="balance_last_modified" property="balance.lastModified" />
 <!-- 		<association property="currency" column="currency_id" resultMap="Currency" /> -->
 		<result column="currency_id" property="currency.currencyId" />
-		<result column="currency_name" property="currency.name" />
+		<result column="currency_name" property="currency.currencyName" />
 		<result column="currency_del_flg" property="currency.delFlg" />
 		<result column="currency_last_modified" property="currency.lastModified" />
 	</resultMap>
-	
+
 	<select id="findAccountByIdAndCurrencyId" parameterType="java.util.Map" resultMap="Account">
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.created_date,
 			a.last_modified,
 			u.user_id AS user_id,
 			u.username AS username,
@@ -70,7 +72,7 @@
 			b.del_flg AS balance_del_flg,
 			b.start_amount AS start_amount,
 			c.currency_id AS currency_id,
-			c.name AS currency_name,
+			c.currency_name AS currency_name,
 			c.del_flg AS currency_del_flg
 		FROM
 			account a JOIN "user" u ON a.user_id = u.user_id
@@ -81,13 +83,14 @@
 			AND c.currency_id = #{currencyId}
 			AND u.del_flg = false
 			AND a.del_flg = false
-		ORDER BY c.name;
+		ORDER BY c.currency_name;
 	</select>
-	
+
 	<select id="findAllAccountByUserId" parameterType="Integer" resultMap="Account">
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.created_date,
 			a.last_modified,
 			u.user_id,
 			u.username,
@@ -103,11 +106,12 @@
 			AND a.del_flg = false
 			AND user_id = #{userId}
 	</select>
-	
+
 	<select id="findAllAccountByUserName" parameterType="String" resultMap="Account">
 		SELECT
 			a.account_id, 
 			a.account_name,
+			a.created_date,
 			a.last_modified,
 			u.user_id AS user_id,
 			u.username AS username,
@@ -121,7 +125,7 @@
 			b.del_flg AS balance_del_flg,
 			b.start_amount AS start_amount,
 			c.currency_id AS currency_id,
-			c.name AS currency_name,
+			c.currency_name AS currency_name,
 			c.del_flg AS currency_del_flg
 		FROM
 			account a JOIN "user" u ON a.user_id = u.user_id
@@ -131,7 +135,7 @@
 			u.del_flg = false
 			AND a.del_flg = false
 			AND username = #{username}
-		ORDER BY c.name;
+		ORDER BY c.currency_name;
 	</select>
 
 	<insert id="addNewAccountAndBalance" parameterType="Account">
@@ -140,11 +144,13 @@
 				account_name,
 				del_flg,
 				user_id,
+				created_date,
 				last_modified
 			) VALUES (
 				#{accountName},
 				false,
 				#{user.userId},
+				now(),
 				now()
 			) RETURNING account_id
 		)

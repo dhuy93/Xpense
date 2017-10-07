@@ -4,7 +4,7 @@
 <mapper namespace="com.huyld.xpense.repository.CurrencyRepository">
 	<resultMap type="com.huyld.xpense.model.Currency" id="Currency">
 		<result column="currency_id" property="currencyId" />
-		<result column="name" property="name" />
+		<result column="currency_name" property="currencyName" />
 		<result column="del_flg" property="delFlg" />
 		<result column="last_modified" property="lastModified" />
 	</resultMap>
@@ -12,7 +12,7 @@
 	<select id="findAllCurrency" resultMap="Currency">
 		SELECT
 			currency_id,
-			"name",
+			currency_name,
 			del_flg,
 			last_modified
 		FROM

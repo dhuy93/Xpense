@@ -19,6 +19,7 @@ public class Account {
 	private Balance balance;
 	private Currency currency;
 	private String encryptedId;
+	private Timestamp createdDate;
 	private Timestamp lastModified;
 	private String lastModifiedStr;
 
@@ -122,6 +123,20 @@ public class Account {
 	 */
 	public void setEncryptedId(String encryptedId) {
 		this.encryptedId = encryptedId;
+	}
+
+	/**
+	 * @return the createdDate
+	 */
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+
+	/**
+	 * @param createdDate the createdDate to set
+	 */
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	/**

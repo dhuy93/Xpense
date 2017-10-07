@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class Currency {
 
 	private String currencyId;
-	private String name;
+	private String currencyName;
 	private boolean delFlg;
 	private String encryptedId;
 	private Timestamp lastModified;
@@ -34,18 +34,18 @@ public class Currency {
 	}
 
 	/**
-	 * @return the name
+	 * @return the currencyName
 	 */
-	public String getName() {
-		return name;
+	public String getCurrencyName() {
+		return currencyName;
 	}
 
 	/**
-	 * @param name
+	 * @param currencyName
 	 *            the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
 	}
 
 	/**
