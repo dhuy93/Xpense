@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups xmlns="http://www.isdc.ro/wro">
+	<group name="lib">
+		<js>/resources/js/vendor/jquery-3.2.1.js</js>
+		<js>/resources/js/vendor/*.js</js>
+		<js>/resources/js/vendor/i18n/*.js</js>
+		<js>/resources/startbootstrap-sb-admin-2/vendor/**.js</js>
+		<js>/resources/startbootstrap-sb-admin-2/dist/**.js</js>
+		<css>/resources/css/vendor/**.css</css>
+		<css>/resources/startbootstrap-sb-admin-2/**.css</css>
+	</group>
+	<group name="main">
+		<group-ref>lib</group-ref>
+		<js>/resources/js/*.js</js>
+		<css>/resources/less/**.less</css>
+	</group>
+</groups>
